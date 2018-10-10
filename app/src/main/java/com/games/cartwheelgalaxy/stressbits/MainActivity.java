@@ -1,5 +1,6 @@
 package com.games.cartwheelgalaxy.stressbits;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Rect;
@@ -18,6 +19,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
@@ -30,36 +32,74 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends Activity {
     private float xCoOrdinate, yCoOrdinate;
-    Button btnRotate;
-    ImageView figureCircleBlue, figureCircleRed, figureCircleDBlue, figureCircleGreen, figureCircleYellow,  bin, imageView, timerNeedle ;
+    ImageView figureCircleBlue, figureCircleRed, figureCircleDBlue, figureCircleGreen, figureCircleYellow, figureSquareBlue, figureSquareRed, figureSquareDBlue, figureSquareGreen, figureSquareYellow,
+            figureStarBlue, figureStarRed, figureStarDBlue, figureStarGreen, figureStarYellow, figureTriangleBlue, figureTriangleRed, figureTriangleDBlue, figureTriangleGreen, figureTriangleYellow,
+            figureHexagonBlue, figureHexagonRed, figureHexagonDBlue, figureHexagonGreen, figureHexagonYellow, bin, randomStr, timerNeedle, randomElement;
     float windowWidth, windowHeight;
-    ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6,imageView7,imageView8,imageView9,imageView10,imageView11,imageView12,
-            imageView13,imageView14,imageView15,imageView16,imageView17,imageView18,imageView19,imageView20,imageView21,imageView22,imageView23,imageView24,imageView25;
+    int numRand;
+    ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7, imageView8, imageView9, imageView10, imageView11, imageView12,
+            imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19, imageView20, imageView21, imageView22, imageView23, imageView24, imageView25;
     List<ImageView> names;
     List<ImageView> figures;
-
+    Random rand = new Random();
+    int counter = -1;
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+/*
+        LottieAnimationView animationView = (LottieAnimationView)  findViewById(R.id.animation_view);
+        animationView.setImageAssetsFolder("images/");
+        animationView.setAnimation("intro.json");
+        animationView.loop(false);
+        animationView.playAnimation();
+
+
+
+        LottieAnimationView lottieAnimationView = (LottieAnimationView) findViewById(R.id.animation_view);
+        lottieAnimationView.setImageAssetsFolder("images/");
+        lottieAnimationView.setAnimation("intro.json");
+        lottieAnimationView.loop(true);
+        lottieAnimationView.playAnimation();
+*/
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         windowHeight = displayMetrics.heightPixels;
         windowWidth = displayMetrics.widthPixels;
 
-        figureCircleBlue = (ImageView) findViewById(R.id.figureCircleBlue);
-        figureCircleDBlue = (ImageView) findViewById(R.id.figureCircleDBlue);
-        figureCircleGreen = (ImageView) findViewById(R.id.figureCircleGreen);
-        figureCircleRed = (ImageView) findViewById(R.id.figureCircleRed);
-        figureCircleYellow = (ImageView) findViewById(R.id.figureCircleYellow);
+        figureCircleBlue = findViewById(R.id.figureCircleBlue);
+        figureCircleDBlue =  findViewById(R.id.figureCircleDBlue);
+        figureCircleGreen =  findViewById(R.id.figureCircleGreen);
+        figureCircleRed =  findViewById(R.id.figureCircleRed);
+        figureCircleYellow =  findViewById(R.id.figureCircleYellow);
+        figureSquareBlue = findViewById(R.id.figureSquareBlue);
+        figureSquareDBlue = findViewById(R.id.figureSquareDBlue);
+        figureSquareGreen = findViewById(R.id.figureSquareGreen);
+        figureSquareRed = findViewById(R.id.figureSquareRed);
+        figureSquareYellow = findViewById(R.id.figureSquareYellow);
+        figureStarBlue = findViewById(R.id.figureStarBlue);
+        figureStarDBlue = findViewById(R.id.figureStarDBlue);
+        figureStarGreen = findViewById(R.id.figureStarGreen);
+        figureStarRed = findViewById(R.id.figureStarRed);
+        figureStarYellow = findViewById(R.id.figureStarYellow);
+        figureTriangleBlue = findViewById(R.id.figureTriangleBlue);
+        figureTriangleDBlue = findViewById(R.id.figureTriangleDBlue);
+        figureTriangleGreen = findViewById(R.id.figureTriangleGreen);
+        figureTriangleRed = findViewById(R.id.figureTriangleRed);
+        figureTriangleYellow = findViewById(R.id.figureTriangleYellow);
+        figureHexagonBlue = findViewById(R.id.figureHexagonBlue);
+        figureHexagonDBlue = findViewById(R.id.figureHexagonDBlue);
+        figureHexagonGreen = findViewById(R.id.figureHexagonGreen);
+        figureHexagonRed = findViewById(R.id.figureHexagonRed);
+        figureHexagonYellow = findViewById(R.id.figureHexagonYellow);
+
         timerNeedle = findViewById(R.id.timerNeedle);
         bin = (ImageView) findViewById(R.id.bin);
-        imageView = (ImageView) findViewById(R.id.imageView);
 
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
@@ -88,10 +128,10 @@ public class MainActivity extends Activity {
         imageView24 = (ImageView) findViewById(R.id.imageView24);
         imageView25 = (ImageView) findViewById(R.id.imageView25);
 
-        ImageView Imageviews[] = {imageView1,imageView2,imageView3,imageView4,imageView5,
-                imageView6,imageView7,imageView8,imageView9,imageView10,imageView11,imageView12,
-                imageView13,imageView14,imageView15,imageView16,imageView17,imageView18,imageView19,
-                imageView20,imageView21,imageView22,imageView23,imageView24,imageView25};
+        ImageView Imageviews[] = {imageView1, imageView2, imageView3, imageView4, imageView5,
+                imageView6, imageView7, imageView8, imageView9, imageView10, imageView11, imageView12,
+                imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19,
+                imageView20, imageView21, imageView22, imageView23, imageView24, imageView25};
         Collections.shuffle(Arrays.asList(Imageviews));
 
         System.out.println("ARRAY0" + Imageviews[0]);
@@ -148,8 +188,6 @@ public class MainActivity extends Activity {
         names.add(imageView25);
 
 
-
-
         // shuffle or randomize
         Collections.shuffle(names);
         System.out.println("LISTA0" + names.get(0));
@@ -183,8 +221,8 @@ public class MainActivity extends Activity {
         System.out.println("LISTA24" + names.get(24));
 
 
-        int intname= imageView1.getId();
-        String stringname= getResources().getResourceEntryName(intname);
+        int intname = imageView1.getId();
+        String stringname = getResources().getResourceEntryName(intname);
         System.out.println("stringname: " + stringname);
 
 
@@ -274,157 +312,96 @@ public class MainActivity extends Activity {
         Log.v("POSICION23", imageName24);
         Log.v("POSICION24", imageName25);
 
-        names.get(0).setImageResource(getResources().getIdentifier(imageName1, "drawable", getPackageName()));
-        names.get(1).setImageResource(getResources().getIdentifier(imageName2, "drawable", getPackageName()));
-        names.get(2).setImageResource(getResources().getIdentifier(imageName3, "drawable", getPackageName()));
-        names.get(3).setImageResource(getResources().getIdentifier(imageName4, "drawable", getPackageName()));
-        names.get(4).setImageResource(getResources().getIdentifier(imageName5, "drawable", getPackageName()));
+        names.get(0).setImageResource(getResources().getIdentifier(imageName1, "mipmap", getPackageName()));
+        names.get(1).setImageResource(getResources().getIdentifier(imageName2, "mipmap", getPackageName()));
+        names.get(2).setImageResource(getResources().getIdentifier(imageName3, "mipmap", getPackageName()));
+        names.get(3).setImageResource(getResources().getIdentifier(imageName4, "mipmap", getPackageName()));
+        names.get(4).setImageResource(getResources().getIdentifier(imageName5, "mipmap", getPackageName()));
 
-        names.get(5).setImageResource(getResources().getIdentifier(imageName6, "drawable", getPackageName()));
-        names.get(6).setImageResource(getResources().getIdentifier(imageName7, "drawable", getPackageName()));
-        names.get(7).setImageResource(getResources().getIdentifier(imageName8, "drawable", getPackageName()));
-        names.get(8).setImageResource(getResources().getIdentifier(imageName9, "drawable", getPackageName()));
-        names.get(9).setImageResource(getResources().getIdentifier(imageName10, "drawable", getPackageName()));
+        names.get(5).setImageResource(getResources().getIdentifier(imageName6, "mipmap", getPackageName()));
+        names.get(6).setImageResource(getResources().getIdentifier(imageName7, "mipmap", getPackageName()));
+        names.get(7).setImageResource(getResources().getIdentifier(imageName8, "mipmap", getPackageName()));
+        names.get(8).setImageResource(getResources().getIdentifier(imageName9, "mipmap", getPackageName()));
+        names.get(9).setImageResource(getResources().getIdentifier(imageName10, "mipmap", getPackageName()));
 
-        names.get(10).setImageResource(getResources().getIdentifier(imageName11, "drawable", getPackageName()));
-        names.get(11).setImageResource(getResources().getIdentifier(imageName12, "drawable", getPackageName()));
-        names.get(12).setImageResource(getResources().getIdentifier(imageName13, "drawable", getPackageName()));
-        names.get(13).setImageResource(getResources().getIdentifier(imageName14, "drawable", getPackageName()));
-        names.get(14).setImageResource(getResources().getIdentifier(imageName15, "drawable", getPackageName()));
+        names.get(10).setImageResource(getResources().getIdentifier(imageName11, "mipmap", getPackageName()));
+        names.get(11).setImageResource(getResources().getIdentifier(imageName12, "mipmap", getPackageName()));
+        names.get(12).setImageResource(getResources().getIdentifier(imageName13, "mipmap", getPackageName()));
+        names.get(13).setImageResource(getResources().getIdentifier(imageName14, "mipmap", getPackageName()));
+        names.get(14).setImageResource(getResources().getIdentifier(imageName15, "mipmap", getPackageName()));
 
-        names.get(15).setImageResource(getResources().getIdentifier(imageName16, "drawable", getPackageName()));
-        names.get(16).setImageResource(getResources().getIdentifier(imageName17, "drawable", getPackageName()));
-        names.get(17).setImageResource(getResources().getIdentifier(imageName18, "drawable", getPackageName()));
-        names.get(18).setImageResource(getResources().getIdentifier(imageName19, "drawable", getPackageName()));
-        names.get(19).setImageResource(getResources().getIdentifier(imageName20, "drawable", getPackageName()));
+        names.get(15).setImageResource(getResources().getIdentifier(imageName16, "mipmap", getPackageName()));
+        names.get(16).setImageResource(getResources().getIdentifier(imageName17, "mipmap", getPackageName()));
+        names.get(17).setImageResource(getResources().getIdentifier(imageName18, "mipmap", getPackageName()));
+        names.get(18).setImageResource(getResources().getIdentifier(imageName19, "mipmap", getPackageName()));
+        names.get(19).setImageResource(getResources().getIdentifier(imageName20, "mipmap", getPackageName()));
 
-        names.get(20).setImageResource(getResources().getIdentifier(imageName21, "drawable", getPackageName()));
-        names.get(21).setImageResource(getResources().getIdentifier(imageName22, "drawable", getPackageName()));
-        names.get(22).setImageResource(getResources().getIdentifier(imageName23, "drawable", getPackageName()));
-        names.get(23).setImageResource(getResources().getIdentifier(imageName24, "drawable", getPackageName()));
-        names.get(24).setImageResource(getResources().getIdentifier(imageName25, "drawable", getPackageName()));
+        names.get(20).setImageResource(getResources().getIdentifier(imageName21, "mipmap", getPackageName()));
+        names.get(21).setImageResource(getResources().getIdentifier(imageName22, "mipmap", getPackageName()));
+        names.get(22).setImageResource(getResources().getIdentifier(imageName23, "mipmap", getPackageName()));
+        names.get(23).setImageResource(getResources().getIdentifier(imageName24, "mipmap", getPackageName()));
+        names.get(24).setImageResource(getResources().getIdentifier(imageName25, "mipmap", getPackageName()));
 
+        figures = new ArrayList<ImageView>();
+        figures.add(figureCircleBlue);
+        figures.add(figureCircleDBlue);
+        figures.add(figureCircleGreen);
+        figures.add(figureCircleRed);
+        figures.add(figureCircleYellow);
+        figures.add(figureSquareBlue);
+        figures.add(figureSquareDBlue);
+        figures.add(figureSquareGreen);
+        figures.add(figureSquareRed);
+        figures.add(figureSquareYellow);
+        figures.add(figureTriangleBlue);
+        figures.add(figureTriangleDBlue);
+        figures.add(figureTriangleGreen);
+        figures.add(figureTriangleRed);
+        figures.add(figureTriangleYellow);
+        figures.add(figureHexagonBlue);
+        figures.add(figureHexagonDBlue);
+        figures.add(figureHexagonGreen);
+        figures.add(figureHexagonRed);
+        figures.add(figureHexagonYellow);
+        figures.add(figureStarBlue);
+        figures.add(figureStarDBlue);
+        figures.add(figureStarGreen);
+        figures.add(figureStarRed);
+        figures.add(figureStarYellow);
+        Collections.shuffle(figures);
 
+        figureCircleBlue.setTag("container_circle_blue");
+        figureSquareBlue.setTag("container_square_blue");
+        figureHexagonBlue.setTag("container_hexagone_blue");
+        figureTriangleBlue.setTag("container_triangle_blue");
+        figureStarBlue.setTag("container_star_blue");
 
+        figureCircleDBlue.setTag("container_circle_dblue");
+        figureSquareDBlue.setTag("container_square_dblue");
+        figureHexagonDBlue.setTag("container_hexagone_dblue");
+        figureTriangleDBlue.setTag("container_triangle_dblue");
+        figureStarDBlue.setTag("container_star_dblue");
 
-        figureCircleBlue.setOnTouchListener(new View.OnTouchListener() {
+        figureCircleGreen.setTag("container_circle_green");
+        figureSquareGreen.setTag("container_square_green");
+        figureHexagonGreen.setTag("container_hexagone_green");
+        figureTriangleGreen.setTag("container_triangle_green");
+        figureStarGreen.setTag("container_star_green");
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
+        figureCircleRed.setTag("container_circle_red");
+        figureSquareRed.setTag("container_square_red");
+        figureHexagonRed.setTag("container_hexagone_red");
+        figureTriangleRed.setTag("container_triangle_red");
+        figureStarRed.setTag("container_star_red");
 
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        xCoOrdinate = view.getX() - event.getRawX();
-                        yCoOrdinate = view.getY() - event.getRawY();
-
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        view.animate().x(event.getRawX() + xCoOrdinate).y(event.getRawY() + yCoOrdinate).setDuration(0).start();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        detectCollision();
-
-                        break;
-
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
-
-
-
-        figureCircleRed.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        xCoOrdinate = view.getX() - event.getRawX();
-                        yCoOrdinate = view.getY() - event.getRawY();
-
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        view.animate().x(event.getRawX() + xCoOrdinate).y(event.getRawY() + yCoOrdinate).setDuration(0).start();
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        detectCollisionRed();
-
-                        break;
-
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
+        figureCircleYellow.setTag("container_circle_yellow");
+        figureSquareYellow.setTag("container_square_yellow");
+        figureHexagonYellow.setTag("container_hexagone_yellow");
+        figureTriangleYellow.setTag("container_triangle_yellow");
+        figureStarYellow.setTag("container_star_yellow");
 
 
-        figureCircleGreen.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        xCoOrdinate = view.getX() - event.getRawX();
-                        yCoOrdinate = view.getY() - event.getRawY();
-
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        view.animate().x(event.getRawX() + xCoOrdinate).y(event.getRawY() + yCoOrdinate).setDuration(0).start();
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        detectCollisionGreen();
-
-                        break;
-
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
-
-
-        figureCircleYellow.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        xCoOrdinate = view.getX() - event.getRawX();
-                        yCoOrdinate = view.getY() - event.getRawY();
-
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        view.animate().x(event.getRawX() + xCoOrdinate).y(event.getRawY() + yCoOrdinate).setDuration(0).start();
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        detectCollisionYellow();
-
-                        break;
-
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
 
         bin.setOnTouchListener(new View.OnTouchListener() {
 
@@ -433,83 +410,61 @@ public class MainActivity extends Activity {
 
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
+                        Log.v("TAG1", String.valueOf(imageView6.getTag()));
+                        Log.v("TAG2", String.valueOf(figureCircleBlue.getTag()));
+/*
+                        numRand =rand.nextInt(figures.size());
 
-                        figures = new ArrayList<ImageView>();
-                        figures.add(figureCircleBlue);
-                        figures.add(figureCircleDBlue);
-                        figures.add(figureCircleGreen);
-                        figures.add(figureCircleRed);
-                        figures.add(figureCircleYellow);
 
+                        int index = new Random().nextInt(figures.size());
+                        // Remove the question from the list and store it into a variable.
+
+
+
+
+                        randomElement = figures.get(index);
+                        Log.v("VALORRANDOM",String.valueOf(index));
+                        figures.remove(index);
+
+                         for (int i = 0; i <= 0; i++){
+                             counter = counter + 1;
+                         }
+                        Log.v("CONTADOR",String.valueOf(counter));
+
+                        figures.get(counter);
+
+                        Log.v("POSICION",String.valueOf(figures.get(0)));
+
+*/
                         Random r = new Random();
+                        int i1=r.nextInt(80-65) + 65; // from 65, to 80
+                        Toast.makeText(getApplicationContext(), String.valueOf(i1), Toast.LENGTH_SHORT).show();
 
-                        switch(r.nextInt(figures.size())) {
-                            case 0:
-                                Log.d("SELECTED", "FIGURE BLUE");
-                                break;
-                            case 1:
-                                Log.d("SELECTED", "FIGURE DEEPBLUE");
-                                break;
-                            case 2:
-                                Log.d("SELECTED", "FIGURE GREEN");
-                                break;
-                            case 3:
-                                Log.d("SELECTED", "FIGURE RED");
-                                break;
-                            case 4:
-                                Log.d("SELECTED", "FIGURE YELLOW");
-                                break;
-                            default:
-                                Log.d("SELECTED", "NADA");
-                        }
+                        Random random = new Random();
+                        int randomNumber= random.nextInt(24);
+                        Log.v("RandomNumber:", String.valueOf(randomNumber));
 
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 50).setDuration(0).start();
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                      //  detectCollision();
+                       // figures.remove(randomStr);
+                        Toast.makeText(MainActivity.this, "Se soltó la pieza", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         return false;
                 }
                 return true;
-            }
-        });
-
-/*
-        //GRAB A FIGURE
-        bin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                figures = new ArrayList<ImageView>();
-                figures.add(figureCircleBlue);
-                figures.add(figureCircleDBlue);
-                figures.add(figureCircleGreen);
-                figures.add(figureCircleRed);
-                figures.add(figureCircleYellow);
-
-                Random r = new Random();
-
-                switch(r.nextInt(figures.size())) {
-                    case 0:
-                        Log.d("SELECTED", "FIGURE BLUE");
-                        break;
-                    case 1:
-                        Log.d("SELECTED", "FIGURE DEEPBLUE");
-                        break;
-                    case 2:
-                        Log.d("SELECTED", "FIGURE GREEN");
-                        break;
-                    case 3:
-                        Log.d("SELECTED", "FIGURE RED");
-                        break;
-                    case 4:
-                        Log.d("SELECTED", "FIGURE YELLOW");
-                        break;
-                    default:
-                        Log.d("SELECTED", "NADA");
-                }
 
             }
+
+
         });
 
-*/
 
         //ROTATE TIMER NEEDLE
         timerNeedle.setOnClickListener(new View.OnClickListener() {
@@ -528,132 +483,45 @@ public class MainActivity extends Activity {
     }
 
 
-
-    public void detectCollision(){
+    public void detectCollision() {
         final int[] loc = new int[2];
 
-        figureCircleBlue.getLocationInWindow(loc);
+        randomElement.getLocationInWindow(loc);
         final Rect rc1 = new Rect(loc[0], loc[1],
-                loc[0] + figureCircleBlue.getWidth(), loc[1] + figureCircleBlue.getHeight());
+                loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+
 
         names.get(5).getLocationInWindow(loc);
         final Rect rc2 = new Rect(loc[0], loc[1],
                 loc[0] + names.get(5).getWidth(), loc[1] + names.get(5).getHeight());
 
-        if (Rect.intersects(rc1,rc2)) {
+        if (Rect.intersects(rc1, rc2)) {
             Log.d(TAG, "Colision");
             Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
-            names.get(5).setImageResource(R.drawable.filled_circle_blue1x);
 
-            ParticleSystem ps = new ParticleSystem(this, 3, R.drawable.figure_circle_blue1x, 600);
+
+
+            names.get(numRand).setImageResource(R.mipmap.filled_circle_blue);
+            ParticleSystem ps = new ParticleSystem(this, 3, R.mipmap.figure_circle_blue, 600);
             ps.setScaleRange(0.3f, 0.3f);
             ps.setSpeedRange(0.1f, 0.25f);
             ps.setRotationSpeedRange(90, 180);
             ps.setFadeOut(200, new AccelerateInterpolator());
             ps.oneShot(names.get(5), 70);
 
-            figureCircleBlue.setVisibility(View.GONE);
         } else {
             Log.d(TAG, "Sin colision");
             Toast.makeText(this, "No hay colision", Toast.LENGTH_SHORT).show();
 
         }
-    }
-
-    public void detectCollisionRed(){
-        final int[] loc = new int[2];
-
-        figureCircleRed.getLocationInWindow(loc);
-        final Rect rc1 = new Rect(loc[0], loc[1],
-                loc[0] + figureCircleRed.getWidth(), loc[1] + figureCircleRed.getHeight());
-
-        names.get(15).getLocationInWindow(loc);
-        final Rect rc2 = new Rect(loc[0], loc[1],
-                loc[0] + names.get(15).getWidth(), loc[1] + names.get(15).getHeight());
-
-        if (Rect.intersects(rc1,rc2)) {
-            Log.d(TAG, "Colision");
-            Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
-            names.get(15).setImageResource(R.drawable.filled_circle_red1x);
-
-            ParticleSystem ps = new ParticleSystem(this, 3, R.drawable.figure_circle_red1x, 600);
-            ps.setScaleRange(0.3f, 0.3f);
-            ps.setSpeedRange(0.1f, 0.25f);
-            ps.setRotationSpeedRange(90, 180);
-            ps.setFadeOut(200, new AccelerateInterpolator());
-            ps.oneShot(names.get(15), 70);
 
 
-            figureCircleRed.setVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "Sin colision");
-            Toast.makeText(this, "No hay colision", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    public void detectCollisionYellow(){
-        final int[] loc = new int[2];
-
-        figureCircleYellow.getLocationInWindow(loc);
-        final Rect rc1 = new Rect(loc[0], loc[1],
-                loc[0] + figureCircleYellow.getWidth(), loc[1] + figureCircleYellow.getHeight());
-
-        names.get(20).getLocationInWindow(loc);
-        final Rect rc2 = new Rect(loc[0], loc[1],
-                loc[0] + names.get(20).getWidth(), loc[1] + names.get(20).getHeight());
-
-        if (Rect.intersects(rc1,rc2)) {
-            Log.d(TAG, "Colision");
-            Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
-            names.get(20).setImageResource(R.drawable.filled_circle_yellow1x);
-
-            ParticleSystem ps = new ParticleSystem(this, 3, R.drawable.figure_circle_yellow1x, 600);
-            ps.setScaleRange(0.3f, 0.3f);
-            ps.setSpeedRange(0.1f, 0.25f);
-            ps.setRotationSpeedRange(90, 180);
-            ps.setFadeOut(200, new AccelerateInterpolator());
-            ps.oneShot(names.get(20), 70);
 
 
-            figureCircleYellow.setVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "Sin colision");
-            Toast.makeText(this, "No hay colision", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
 
-    public void detectCollisionGreen(){
-        final int[] loc = new int[2];
 
-        figureCircleGreen.getLocationInWindow(loc);
-        final Rect rc1 = new Rect(loc[0], loc[1],
-                loc[0] + figureCircleGreen.getWidth(), loc[1] + figureCircleGreen.getHeight());
-
-        names.get(10).getLocationInWindow(loc);
-        final Rect rc2 = new Rect(loc[0], loc[1],
-                loc[0] + names.get(10).getWidth(), loc[1] + names.get(10).getHeight());
-
-        if (Rect.intersects(rc1,rc2)) {
-            Log.d(TAG, "Colision");
-            Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
-            names.get(10).setImageResource(R.drawable.filled_circle_green1x);
-
-            ParticleSystem ps = new ParticleSystem(this, 3, R.drawable.figure_circle_green1x, 600);
-            ps.setScaleRange(0.3f, 0.3f);
-            ps.setSpeedRange(0.1f, 0.25f);
-            ps.setRotationSpeedRange(90, 180);
-            ps.setFadeOut(200, new AccelerateInterpolator());
-            ps.oneShot(names.get(10), 70);
-
-
-            figureCircleGreen.setVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "Sin colision");
-            Toast.makeText(this, "No hay colision", Toast.LENGTH_SHORT).show();
-
-        }
     }
 }

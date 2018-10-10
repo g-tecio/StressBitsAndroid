@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/board">
+    android:background="@mipmap/board">
 
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid"
-        android:layout_width="486dp"
-        android:layout_height="330dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="21dp"
-        android:layout_marginLeft="21dp"
-        android:layout_marginTop="31dp">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.254"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
 
-            android:background="@drawable/container_circle_dblue"
+            android:background="@mipmap/container_circle_dblue"
             app:layout_column="0"
             app:layout_row="0" />
 
@@ -36,10 +45,10 @@
             android:id="@+id/imageView2"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/container_square_dblue"
+            android:background="@mipmap/container_square_dblue"
 
             app:layout_column="1"
             app:layout_row="0" />
@@ -48,10 +57,10 @@
             android:id="@+id/imageView3"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/container_hexagone_dblue"
+            android:background="@mipmap/container_hexagone_dblue"
 
             app:layout_column="2"
             app:layout_row="0" />
@@ -60,10 +69,10 @@
             android:id="@+id/imageView4"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/container_triangle_dblue"
+            android:background="@mipmap/container_triangle_dblue"
 
             app:layout_column="3"
             app:layout_row="0" />
@@ -72,10 +81,10 @@
             android:id="@+id/imageView5"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_star_dblue"
+            android:background="@mipmap/container_star_dblue"
 
             app:layout_column="4"
             app:layout_row="0" />
@@ -84,10 +93,10 @@
             android:id="@+id/imageView6"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_circle_blue"
+            android:background="@mipmap/container_circle_blue"
 
             app:layout_column="0"
             app:layout_row="1" />
@@ -96,10 +105,10 @@
             android:id="@+id/imageView7"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_square_blue"
+            android:background="@mipmap/container_square_blue"
 
             app:layout_column="1"
             app:layout_row="1" />
@@ -108,10 +117,10 @@
             android:id="@+id/imageView8"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_hexagone_blue"
+            android:background="@mipmap/container_hexagone_blue"
 
             app:layout_column="2"
             app:layout_row="1" />
@@ -120,10 +129,10 @@
             android:id="@+id/imageView9"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_triangle_blue"
+            android:background="@mipmap/container_triangle_blue"
 
             app:layout_column="3"
             app:layout_row="1" />
@@ -132,10 +141,10 @@
             android:id="@+id/imageView10"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_star_blue"
+            android:background="@mipmap/container_star_blue"
 
             app:layout_column="4"
             app:layout_row="1" />
@@ -144,11 +153,11 @@
             android:id="@+id/imageView11"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
 
-            android:background="@drawable/container_circle_green"
+            android:background="@mipmap/container_circle_green"
 
             app:layout_column="0"
             app:layout_row="2" />
@@ -157,10 +166,10 @@
             android:id="@+id/imageView12"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_square_green"
+            android:background="@mipmap/container_square_green"
 
             app:layout_column="1"
             app:layout_row="2" />
@@ -169,10 +178,10 @@
             android:id="@+id/imageView13"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_hexagone_green"
+            android:background="@mipmap/container_hexagone_green"
 
             app:layout_column="2"
             app:layout_row="2" />
@@ -181,10 +190,10 @@
             android:id="@+id/imageView14"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_triangle_green"
+            android:background="@mipmap/container_triangle_green"
 
             app:layout_column="3"
             app:layout_row="2" />
@@ -193,10 +202,10 @@
             android:id="@+id/imageView15"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_star_green"
+            android:background="@mipmap/container_star_green"
 
             app:layout_column="4"
             app:layout_row="2" />
@@ -205,10 +214,10 @@
             android:id="@+id/imageView16"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_circle_red"
+            android:background="@mipmap/container_circle_red"
 
             app:layout_column="0"
             app:layout_row="3" />
@@ -217,10 +226,10 @@
             android:id="@+id/imageView17"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_square_red"
+            android:background="@mipmap/container_square_red"
 
             app:layout_column="1"
             app:layout_row="3" />
@@ -229,10 +238,10 @@
             android:id="@+id/imageView18"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_hexagone_red"
+            android:background="@mipmap/container_hexagone_red"
 
             app:layout_column="2"
             app:layout_row="3" />
@@ -241,10 +250,10 @@
             android:id="@+id/imageView19"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_triangle_red"
+            android:background="@mipmap/container_triangle_red"
 
             app:layout_column="3"
             app:layout_row="3" />
@@ -253,10 +262,10 @@
             android:id="@+id/imageView20"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_star_red"
+            android:background="@mipmap/container_star_red"
 
             app:layout_column="4"
             app:layout_row="3" />
@@ -265,10 +274,10 @@
             android:id="@+id/imageView21"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_circle_yellow"
+            android:background="@mipmap/container_circle_yellow"
 
             app:layout_column="0"
             app:layout_row="4" />
@@ -277,10 +286,10 @@
             android:id="@+id/imageView22"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_square_yellow"
+            android:background="@mipmap/container_square_yellow"
 
             app:layout_column="1"
             app:layout_row="4" />
@@ -289,10 +298,10 @@
             android:id="@+id/imageView23"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_hexagone_yellow"
+            android:background="@mipmap/container_hexagone_yellow"
 
             app:layout_column="2"
             app:layout_row="4" />
@@ -301,10 +310,10 @@
             android:id="@+id/imageView24"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_triangle_yellow"
+            android:background="@mipmap/container_triangle_yellow"
 
             app:layout_column="3"
             app:layout_row="4" />
@@ -313,10 +322,10 @@
             android:id="@+id/imageView25"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
+
             android:layout_marginRight="20dp"
             android:layout_marginBottom="7dp"
-            android:background="@drawable/container_star_yellow"
+            android:background="@mipmap/container_star_yellow"
 
             app:layout_column="4"
             app:layout_row="4" />
@@ -331,50 +340,52 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/container_empty" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@mipmap/container_empty"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.985"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.919" />
 
     <ImageView
         android:id="@+id/imageView36"
-        android:layout_width="88dp"
-        android:layout_height="91dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="119dp"
+        android:layout_height="116dp"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="27dp"
-        android:layout_marginTop="13dp"
-        android:background="@drawable/timer_base"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="562dp"
-        tools:layout_editor_absoluteY="26dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@mipmap/timer_base"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.982"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.067"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/timerNeedle"
 
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="46dp"
-        android:layout_marginTop="33dp"
-        android:rotation="-44"
-        android:background="@drawable/timer_needle"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="577dp"
-        tools:layout_editor_absoluteY="48dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="42dp"
-        android:layout_marginRight="42dp"
-        android:layout_marginBottom="212dp" />
+        android:background="@mipmap/timer_needle"
+        android:rotation="-44"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView36"
+        app:layout_constraintEnd_toEndOf="@+id/imageView36"
+        app:layout_constraintStart_toStartOf="@+id/imageView36"
+        app:layout_constraintTop_toTopOf="@+id/imageView36"
+        tools:ignore="MissingConstraints" />
+
 
     <ImageView
         android:id="@+id/figureCircleBlue"
@@ -383,10 +394,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="31dp"
-        android:layout_marginRight="31dp"
-        android:layout_marginBottom="119dp"
-        android:background="@drawable/figure_circle_blue1x" />
+        android:background="@mipmap/figure_circle_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
 
     <ImageView
         android:id="@+id/figureCircleDBlue"
@@ -395,23 +407,30 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
-        android:layout_marginBottom="69dp"
-        android:background="@drawable/figure_circle_dblue1x" />
+        android:background="@mipmap/figure_circle_dblue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.272" />
 
 
     <ImageView
         android:id="@+id/figureCircleGreen"
         android:layout_width="35dp"
         android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="27dp"
-        android:layout_marginRight="27dp"
-        android:layout_marginBottom="77dp"
-        android:background="@drawable/figure_circle_green1x" />
+        android:background="@mipmap/figure_circle_green"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
 
     <ImageView
         android:id="@+id/figureCircleRed"
@@ -420,10 +439,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="78dp"
-        android:layout_marginRight="78dp"
-        android:layout_marginBottom="111dp"
-        android:background="@drawable/figure_circle_red1x" />
+        android:background="@mipmap/figure_circle_red"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
 
     <ImageView
         android:id="@+id/figureCircleYellow"
@@ -432,11 +452,344 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="79dp"
-        android:layout_marginRight="79dp"
-        android:layout_marginBottom="42dp"
-        android:background="@drawable/figure_circle_yellow1x" />
+        android:background="@mipmap/figure_circle_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.682"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <ImageView
+        android:id="@+id/figureTriangleBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_triangle_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.196" />
+
+    <ImageView
+        android:id="@+id/figureTriangleDBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_triangle_dblue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
+
+    <ImageView
+        android:id="@+id/figureTriangleGreen"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_triangle_green"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.196" />
+
+    <ImageView
+        android:id="@+id/figureTriangleRed"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_triangle_red"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <ImageView
+        android:id="@+id/figureTriangleYellow"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_triangle_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.305"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.196" />
+
+    <ImageView
+        android:id="@+id/figureHexagonBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_hexagon_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.717"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.196" />
+
+    <ImageView
+        android:id="@+id/figureHexagonDBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_hexagon_dblue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.575" />
+
+    <ImageView
+        android:id="@+id/figureHexagonGreen"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_hexagon_green"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.682"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <ImageView
+        android:id="@+id/figureHexagonRed"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_hexagon_red"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <ImageView
+        android:id="@+id/figureHexagonYellow"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_hexagon_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.682"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.272" />
+
+    <ImageView
+        android:id="@+id/figureStarBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_star_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.272" />
+
+    <ImageView
+        android:id="@+id/figureStarDBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_star_dblue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
+
+    <ImageView
+        android:id="@+id/figureStarGreen"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_star_green"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.401" />
+
+    <ImageView
+        android:id="@+id/figureStarRed"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_star_red"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
+
+    <ImageView
+        android:id="@+id/figureStarYellow"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_star_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <ImageView
+        android:id="@+id/figureSquareBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_square_blue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
+
+    <ImageView
+        android:id="@+id/figureSquareDBlue"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_square_dblue"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.176"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.34" />
+
+    <ImageView
+        android:id="@+id/figureSquareGreen"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_square_green"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.388"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.575" />
+
+    <ImageView
+        android:id="@+id/figureSquareRed"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_square_red"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin"
+        app:layout_constraintVertical_bias="0.704" />
+
+    <ImageView
+        android:id="@+id/figureSquareYellow"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/bin"
+        android:layout_alignTop="@+id/bin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/figure_square_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/bin"
+        app:layout_constraintEnd_toEndOf="@+id/bin"
+        app:layout_constraintStart_toStartOf="@+id/bin"
+        app:layout_constraintTop_toTopOf="@+id/bin" />
 
 
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,9 +1,15 @@
 package com.games.cartwheelgalaxy.stressbits;
 
+
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
+
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -12,10 +18,12 @@ import android.view.View;
 
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
-import android.widget.GridLayout;
+
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -34,15 +42,27 @@ public class MainActivity extends Activity {
     private float xCoOrdinate, yCoOrdinate;
     ImageView figureCircleBlue, figureCircleRed, figureCircleDBlue, figureCircleGreen, figureCircleYellow, figureSquareBlue, figureSquareRed, figureSquareDBlue, figureSquareGreen, figureSquareYellow,
             figureStarBlue, figureStarRed, figureStarDBlue, figureStarGreen, figureStarYellow, figureTriangleBlue, figureTriangleRed, figureTriangleDBlue, figureTriangleGreen, figureTriangleYellow,
-            figureHexagonBlue, figureHexagonRed, figureHexagonDBlue, figureHexagonGreen, figureHexagonYellow, bin, randomStr, timerNeedle, randomElement;
+            figureHexagonBlue, figureHexagonRed, figureHexagonDBlue, figureHexagonGreen, figureHexagonYellow, bin, timerNeedle, randomElement;
     float windowWidth, windowHeight;
-    int numRand;
+    int xImage, yImage;
     ImageView imageView1, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7, imageView8, imageView9, imageView10, imageView11, imageView12,
-            imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19, imageView20, imageView21, imageView22, imageView23, imageView24, imageView25;
+            imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19, imageView20, imageView21, imageView22, imageView23, imageView24, imageView25, timerBase;
     List<ImageView> names;
     List<ImageView> figures;
     Random rand = new Random();
-    int counter = -1;
+    int count = -1;
+    boolean noEntra=false, clickEnable=false;
+    LottieAnimationView animationView;
+    AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
+    SoundPool sp = new SoundPool.Builder().setMaxStreams(5).setAudioAttributes(attrs).build();
+    int soundIds[] = new int[5];
+
+    SoundPool soundPool;
+    int pieceFit;
+    int PieceDontFit;
+    int timer;
+    int lose;
+    int win;
 
     @SuppressLint("ResourceType")
     @Override
@@ -51,20 +71,49 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 /*
-        LottieAnimationView animationView = (LottieAnimationView)  findViewById(R.id.animation_view);
-        animationView.setImageAssetsFolder("images/");
-        animationView.setAnimation("intro.json");
-        animationView.loop(false);
-        animationView.playAnimation();
+    animationView = (LottieAnimationView)  findViewById(R.id.animation_view);
+
+    animationView.playAnimation();
 
 
+        animationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.e("ÑONGA:","start");
+            }
 
-        LottieAnimationView lottieAnimationView = (LottieAnimationView) findViewById(R.id.animation_view);
-        lottieAnimationView.setImageAssetsFolder("images/");
-        lottieAnimationView.setAnimation("intro.json");
-        lottieAnimationView.loop(true);
-        lottieAnimationView.playAnimation();
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.e("ÑONGA:","end");
+                //Your code for remove the fragment
+
+
+                animationView.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.e("ÑONGA:","cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.e("ÑONGA:","repeat");
+            }
+        });
+
 */
+
+
+
+        soundIds[0] = sp.load(MainActivity.this, R.raw.piece_fit, 1);
+        soundIds[1] = sp.load(MainActivity.this, R.raw.piece_dont_fit, 1);
+        soundIds[2] = sp.load(MainActivity.this, R.raw.timer, 1);
+        soundIds[3] = sp.load(MainActivity.this, R.raw.lose, 1);
+        soundIds[4] = sp.load(MainActivity.this, R.raw.kids_cheering, 1);
+
+
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -99,7 +148,8 @@ public class MainActivity extends Activity {
         figureHexagonYellow = findViewById(R.id.figureHexagonYellow);
 
         timerNeedle = findViewById(R.id.timerNeedle);
-        bin = (ImageView) findViewById(R.id.bin);
+        timerBase = findViewById(R.id.timerBase);
+        bin = findViewById(R.id.bin);
 
 
         imageView1 = (ImageView) findViewById(R.id.imageView1);
@@ -127,38 +177,6 @@ public class MainActivity extends Activity {
         imageView23 = (ImageView) findViewById(R.id.imageView23);
         imageView24 = (ImageView) findViewById(R.id.imageView24);
         imageView25 = (ImageView) findViewById(R.id.imageView25);
-
-        ImageView Imageviews[] = {imageView1, imageView2, imageView3, imageView4, imageView5,
-                imageView6, imageView7, imageView8, imageView9, imageView10, imageView11, imageView12,
-                imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19,
-                imageView20, imageView21, imageView22, imageView23, imageView24, imageView25};
-        Collections.shuffle(Arrays.asList(Imageviews));
-
-        System.out.println("ARRAY0" + Imageviews[0]);
-        System.out.println("ARRAY1" + Imageviews[1]);
-        System.out.println("ARRAY2" + Imageviews[2]);
-        System.out.println("ARRAY3" + Imageviews[3]);
-        System.out.println("ARRAY4" + Imageviews[4]);
-        System.out.println("ARRAY5" + Imageviews[5]);
-        System.out.println("ARRAY6" + Imageviews[6]);
-        System.out.println("ARRAY7" + Imageviews[7]);
-        System.out.println("ARRAY8" + Imageviews[8]);
-        System.out.println("ARRAY9" + Imageviews[9]);
-        System.out.println("ARRAY10" + Imageviews[10]);
-        System.out.println("ARRAY11" + Imageviews[11]);
-        System.out.println("ARRAY12" + Imageviews[12]);
-        System.out.println("ARRAY13" + Imageviews[13]);
-        System.out.println("ARRAY14" + Imageviews[14]);
-        System.out.println("ARRAY15" + Imageviews[15]);
-        System.out.println("ARRAY16" + Imageviews[16]);
-        System.out.println("ARRAY17" + Imageviews[17]);
-        System.out.println("ARRAY18" + Imageviews[18]);
-        System.out.println("ARRAY19" + Imageviews[19]);
-        System.out.println("ARRAY20" + Imageviews[20]);
-        System.out.println("ARRAY21" + Imageviews[21]);
-        System.out.println("ARRAY22" + Imageviews[22]);
-        System.out.println("ARRAY23" + Imageviews[23]);
-        System.out.println("ARRAY24" + Imageviews[24]);
 
         names = new ArrayList<ImageView>();
         names.add(imageView1);
@@ -190,36 +208,6 @@ public class MainActivity extends Activity {
 
         // shuffle or randomize
         Collections.shuffle(names);
-        System.out.println("LISTA0" + names.get(0));
-        System.out.println("LISTA1" + names.get(1));
-        System.out.println("LISTA2" + names.get(2));
-        System.out.println("LISTA3" + names.get(3));
-        System.out.println("LISTA4" + names.get(4));
-
-        System.out.println("LISTA5" + names.get(5));
-        System.out.println("LISTA6" + names.get(6));
-        System.out.println("LISTA7" + names.get(7));
-        System.out.println("LISTA8" + names.get(8));
-        System.out.println("LISTA9" + names.get(9));
-
-        System.out.println("LISTA10" + names.get(10));
-        System.out.println("LISTA11" + names.get(11));
-        System.out.println("LISTA12" + names.get(12));
-        System.out.println("LISTA13" + names.get(13));
-        System.out.println("LISTA14" + names.get(14));
-
-        System.out.println("LISTA15" + names.get(15));
-        System.out.println("LISTA16" + names.get(16));
-        System.out.println("LISTA17" + names.get(17));
-        System.out.println("LISTA18" + names.get(18));
-        System.out.println("LISTA19" + names.get(19));
-
-        System.out.println("LISTA20" + names.get(20));
-        System.out.println("LISTA21" + names.get(21));
-        System.out.println("LISTA22" + names.get(22));
-        System.out.println("LISTA23" + names.get(23));
-        System.out.println("LISTA24" + names.get(24));
-
 
         int intname = imageView1.getId();
         String stringname = getResources().getResourceEntryName(intname);
@@ -286,31 +274,7 @@ public class MainActivity extends Activity {
         String imageName24 = (String) imageView24.getTag();
         String imageName25 = (String) imageView25.getTag();
 
-        Log.v("POSICION0", imageName1);
-        Log.v("POSICION1", imageName2);
-        Log.v("POSICION2", imageName3);
-        Log.v("POSICION3", imageName4);
-        Log.v("POSICION4", imageName5);
-        Log.v("POSICION5", imageName6);
-        Log.v("POSICION6", imageName7);
-        Log.v("POSICION7", imageName8);
-        Log.v("POSICION8", imageName9);
-        Log.v("POSICION9", imageName10);
-        Log.v("POSICION10", imageName11);
-        Log.v("POSICION11", imageName12);
-        Log.v("POSICION12", imageName13);
-        Log.v("POSICION13", imageName14);
-        Log.v("POSICION14", imageName15);
-        Log.v("POSICION15", imageName16);
-        Log.v("POSICION16", imageName17);
-        Log.v("POSICION17", imageName18);
-        Log.v("POSICION18", imageName19);
-        Log.v("POSICION19", imageName20);
-        Log.v("POSICION20", imageName21);
-        Log.v("POSICION21", imageName22);
-        Log.v("POSICION22", imageName23);
-        Log.v("POSICION23", imageName24);
-        Log.v("POSICION24", imageName25);
+
 
         names.get(0).setImageResource(getResources().getIdentifier(imageName1, "mipmap", getPackageName()));
         names.get(1).setImageResource(getResources().getIdentifier(imageName2, "mipmap", getPackageName()));
@@ -368,7 +332,13 @@ public class MainActivity extends Activity {
         figures.add(figureStarGreen);
         figures.add(figureStarRed);
         figures.add(figureStarYellow);
+
+
+
         Collections.shuffle(figures);
+        Log.v("CONTADOR ORIGINAL", String.valueOf(figures.size()));
+
+
 
         figureCircleBlue.setTag("container_circle_blue");
         figureSquareBlue.setTag("container_square_blue");
@@ -403,94 +373,387 @@ public class MainActivity extends Activity {
 
 
 
-        bin.setOnTouchListener(new View.OnTouchListener() {
+        Animation fadeIn = new AlphaAnimation(0.7f, 0.9f);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(1000);
+        fadeIn.setRepeatCount(Animation.INFINITE);
 
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
+        Animation fadeOut = new AlphaAnimation(0.9f, 0.7f);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
 
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.v("TAG1", String.valueOf(imageView6.getTag()));
-                        Log.v("TAG2", String.valueOf(figureCircleBlue.getTag()));
-/*
-                        numRand =rand.nextInt(figures.size());
+        fadeOut.setDuration(1000);
+        fadeOut.setRepeatCount(Animation.INFINITE);
 
+        final AnimationSet animation = new AnimationSet(false); //change to false
+        animation.addAnimation(fadeOut);
+        animation.addAnimation(fadeIn);
+        timerBase.setAnimation(animation);
 
-                        int index = new Random().nextInt(figures.size());
-                        // Remove the question from the list and store it into a variable.
-
-
-
-
-                        randomElement = figures.get(index);
-                        Log.v("VALORRANDOM",String.valueOf(index));
-                        figures.remove(index);
-
-                         for (int i = 0; i <= 0; i++){
-                             counter = counter + 1;
-                         }
-                        Log.v("CONTADOR",String.valueOf(counter));
-
-                        figures.get(counter);
-
-                        Log.v("POSICION",String.valueOf(figures.get(0)));
-
-*/
-                        Random r = new Random();
-                        int i1=r.nextInt(80-65) + 65; // from 65, to 80
-                        Toast.makeText(getApplicationContext(), String.valueOf(i1), Toast.LENGTH_SHORT).show();
-
-                        Random random = new Random();
-                        int randomNumber= random.nextInt(24);
-                        Log.v("RandomNumber:", String.valueOf(randomNumber));
-
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 50).setDuration(0).start();
-
-                        break;
-                    case MotionEvent.ACTION_UP:
-                      //  detectCollision();
-                       // figures.remove(randomStr);
-                        Toast.makeText(MainActivity.this, "Se soltó la pieza", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        return false;
-                }
-                return true;
-
-            }
-
-
-        });
-
+        bin.setEnabled(false);
 
         //ROTATE TIMER NEEDLE
         timerNeedle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sp.play(soundIds[2], 1, 1, 1, 290, 1.0f);
+
                 RotateAnimation rotation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF,
                         0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                rotation.setDuration(10000);
+                rotation.setDuration(90000);
 
                 timerNeedle.setAnimation(rotation);
                 timerNeedle.startAnimation(rotation);
+                timerNeedle.setEnabled(false);
+                timerBase.clearAnimation();
+                timerBase.setAlpha(1.0f);
+                bin.setEnabled(true);
+                Log.v("ACTIVADO","SI SE ARMA");
+
+
+                rotation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        // Pass the Intent to switch to other Activity
+
+                        sp.play(soundIds[3], 1, 1, 1, 0, 1.0f);
+                            Intent menuIntent = new Intent(MainActivity.this, LoseActivity.class);
+                            startActivity(menuIntent);
+                            Log.v("PERDISTE", "CAMBIO DE ESCENA");
+
+
+                    }
+                });
             }
         });
+
+        Log.v("CONTADOR ARRAY", String.valueOf(figures.size()));
+
+
+
+
+            bin.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+
+                    switch (event.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+
+                            count = count + 1;
+                            Log.v("CONTADOR", String.valueOf(count));
+                            Log.v("CONTADOR ARRAY", String.valueOf(figures.size()));
+
+
+
+                            if (count == 25) {
+                                count = count - 24;
+                                Log.v("CONTADOR NUEVO", String.valueOf(count));
+                            }
+
+                            if (count >= figures.size()) {
+                                count = figures.size() - 1;
+                                // count = count - 24;
+                                Log.v("NUEVO", String.valueOf(count));
+                            }
+
+                            randomElement = figures.get(count);
+                            xImage = randomElement.getLeft();
+                            yImage = randomElement.getTop();
+                            Log.v("XIMAGE", String.valueOf(xImage));
+                            Log.v("YIMAGE", String.valueOf(yImage));
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 50).setDuration(0).start();
+                            //  randomElement.animate().translationYBy(-100).setDuration(500);
+
+                            break;
+                        case MotionEvent.ACTION_UP:
+
+                            detectCollision();
+                            if (noEntra == false) {
+                                figures.remove(count);
+                                Log.v("ANTES: ", String.valueOf(count));
+                            }
+
+                            if (figures.size() == 0){
+                                sp.play(soundIds[4], 1, 1, 1, 0, 1.0f);
+                                Intent menuIntent = new Intent(MainActivity.this, WinActivity.class);
+                                startActivity(menuIntent);
+                                Log.v("PERDISTE", "CAMBIO DE ESCENA");
+
+                            }
+
+
+/*
+                        if (count <= figures.size()){
+                            // figures.add(imageView1);
+                            if(figures.size() == 1 ){
+                                Log.v("ENTRO: ",String.valueOf(count));
+
+                                count = 1;
+                            }
+                            Log.v("DESPUES: ",String.valueOf(count));
+                            count = figures.size() -1;
+                        }
+*/
+
+
+                            //  Toast.makeText(MainActivity.this, "Se soltó la pieza", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        default:
+                            return false;
+                    }
+                    return true;
+                }
+            });
+
+
+
 
 
     }
 
 
     public void detectCollision() {
+
+        if (randomElement.getTag() == imageView1.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(0).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(0).getWidth(), loc[1] + names.get(0).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(0).setImageResource(R.mipmap.filled_circle_dblue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_dblue, 350);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(0), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+
+        if (randomElement.getTag() == imageView2.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(1).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(1).getWidth(), loc[1] + names.get(1).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(1).setImageResource(R.mipmap.filled_squre_dblue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_dblue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(1), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+
+
+        if (randomElement.getTag() == imageView3.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(2).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(2).getWidth(), loc[1] + names.get(2).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(2).setImageResource(R.mipmap.filled_hexagon_dblue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_dblue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(2), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+
+        if (randomElement.getTag() == imageView4.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(3).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(3).getWidth(), loc[1] + names.get(3).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(3).setImageResource(R.mipmap.filled_triangle_dblue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_dblue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(3), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView5.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(4).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(3).getWidth(), loc[1] + names.get(4).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(4).setImageResource(R.mipmap.filled_star_dblue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_dblue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(4), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+
+
+        if (randomElement.getTag() == imageView6.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
         final int[] loc = new int[2];
 
         randomElement.getLocationInWindow(loc);
         final Rect rc1 = new Rect(loc[0], loc[1],
                 loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
-
-
 
 
         names.get(5).getLocationInWindow(loc);
@@ -499,13 +762,14 @@ public class MainActivity extends Activity {
 
         if (Rect.intersects(rc1, rc2)) {
             Log.d(TAG, "Colision");
+            noEntra = false;
             Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+            names.get(5).setImageResource(R.mipmap.filled_circle_blue);
+            randomElement.setVisibility(View.GONE);
+            sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
 
-
-
-            names.get(numRand).setImageResource(R.mipmap.filled_circle_blue);
-            ParticleSystem ps = new ParticleSystem(this, 3, R.mipmap.figure_circle_blue, 600);
-            ps.setScaleRange(0.3f, 0.3f);
+            ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 600);
+            ps.setScaleRange(1f, 2.3f);
             ps.setSpeedRange(0.1f, 0.25f);
             ps.setRotationSpeedRange(90, 180);
             ps.setFadeOut(200, new AccelerateInterpolator());
@@ -513,15 +777,816 @@ public class MainActivity extends Activity {
 
         } else {
             Log.d(TAG, "Sin colision");
-            Toast.makeText(this, "No hay colision", Toast.LENGTH_SHORT).show();
+            noEntra = true;
+
+            count = count + 1;
+            randomElement.setY(yImage);
+            randomElement.setX(xImage);
+            sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+
+        }
+
+        }
+
+        if (randomElement.getTag() == imageView7.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(6).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(6).getWidth(), loc[1] + names.get(6).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(6).setImageResource(R.mipmap.filled_squre_blue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_blue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(6), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
 
         }
 
 
 
+        if (randomElement.getTag() == imageView8.getTag()){
+            Log.v("Correcto", "son iguales");
 
 
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
 
 
+            names.get(7).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(7).getWidth(), loc[1] + names.get(7).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(7).setImageResource(R.mipmap.filled_hexagon_blue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_blue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(7), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView9.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(8).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(8).getWidth(), loc[1] + names.get(8).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(8).setImageResource(R.mipmap.filled_triangle_blue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_blue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(8), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView10.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(9).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(9).getWidth(), loc[1] + names.get(9).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(9).setImageResource(R.mipmap.filled_star_blue);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_blue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(9), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView11.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(10).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(10).getWidth(), loc[1] + names.get(10).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(10).setImageResource(R.mipmap.filled_circle_green);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_green, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(10), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView12.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(11).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(11).getWidth(), loc[1] + names.get(11).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(11).setImageResource(R.mipmap.filled_squre_green);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_green, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(11), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView13.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(12).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(12).getWidth(), loc[1] + names.get(12).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(12).setImageResource(R.mipmap.filled_hexagon_green);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_green, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(12), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView14.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(13).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(13).getWidth(), loc[1] + names.get(13).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(13).setImageResource(R.mipmap.filled_triangle_green);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_green, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(13), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+        }
+
+        if (randomElement.getTag() == imageView15.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(14).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(14).getWidth(), loc[1] + names.get(14).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(14).setImageResource(R.mipmap.filled_star_green);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_green, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(14), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView16.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(15).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(15).getWidth(), loc[1] + names.get(15).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(15).setImageResource(R.mipmap.filled_circle_red);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_red, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(15), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView17.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(16).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(16).getWidth(), loc[1] + names.get(16).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(16).setImageResource(R.mipmap.filled_squre_red);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_red, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(16), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+        if (randomElement.getTag() == imageView18.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(17).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(17).getWidth(), loc[1] + names.get(17).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(17).setImageResource(R.mipmap.filled_hexagon_red);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_red, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(17), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView19.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(18).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(18).getWidth(), loc[1] + names.get(18).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(18).setImageResource(R.mipmap.filled_triangle_red);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_red, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(18), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView20.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(19).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(19).getWidth(), loc[1] + names.get(19).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(19).setImageResource(R.mipmap.filled_star_red);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_red, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(19), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView21.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(20).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(20).getWidth(), loc[1] + names.get(20).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(20).setImageResource(R.mipmap.filled_circle_yellow);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_yellow, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(20), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView22.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(21).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(21).getWidth(), loc[1] + names.get(21).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(21).setImageResource(R.mipmap.filled_squre_yellow);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_yellow, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(21), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView23.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(22).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(22).getWidth(), loc[1] + names.get(22).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(22).setImageResource(R.mipmap.filled_hexagon_yellow);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_yellow, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(22), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView24.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(23).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(23).getWidth(), loc[1] + names.get(23).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(23).setImageResource(R.mipmap.filled_triangle_yellow);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_yellow, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(23), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            }
+
+        }
+
+        if (randomElement.getTag() == imageView25.getTag()){
+            Log.v("Correcto", "son iguales");
+
+
+            final int[] loc = new int[2];
+
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
+
+
+            names.get(24).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(24).getWidth(), loc[1] + names.get(24).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+                names.get(24).setImageResource(R.mipmap.filled_star_yellow);
+                randomElement.setVisibility(View.GONE);
+                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_yellow, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(24), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+
+                count = count + 1;
+                randomElement.setY(yImage);
+                randomElement.setX(xImage);
+                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+            }
+
+        }
     }
 }

@@ -10,8 +10,8 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="385dp"
+        android:layout_height="333dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -353,7 +353,7 @@
         app:layout_constraintVertical_bias="0.919" />
 
     <ImageView
-        android:id="@+id/imageView36"
+        android:id="@+id/timerBase"
         android:layout_width="119dp"
         android:layout_height="116dp"
         android:layout_alignParentTop="true"
@@ -373,24 +373,23 @@
 
     <ImageView
         android:id="@+id/timerNeedle"
-
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="63dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:background="@mipmap/timer_needle"
         android:rotation="-44"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView36"
-        app:layout_constraintEnd_toEndOf="@+id/imageView36"
-        app:layout_constraintStart_toStartOf="@+id/imageView36"
-        app:layout_constraintTop_toTopOf="@+id/imageView36"
+        app:layout_constraintBottom_toBottomOf="@+id/timerBase"
+        app:layout_constraintEnd_toEndOf="@+id/timerBase"
+        app:layout_constraintStart_toStartOf="@+id/timerBase"
+        app:layout_constraintTop_toTopOf="@+id/timerBase"
         tools:ignore="MissingConstraints" />
 
 
     <ImageView
         android:id="@+id/figureCircleBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -403,7 +402,7 @@
     <ImageView
         android:id="@+id/figureCircleDBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -419,7 +418,7 @@
     <ImageView
         android:id="@+id/figureCircleGreen"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -435,7 +434,7 @@
     <ImageView
         android:id="@+id/figureCircleRed"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -448,7 +447,7 @@
     <ImageView
         android:id="@+id/figureCircleYellow"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
@@ -463,7 +462,7 @@
     <ImageView
         android:id="@+id/figureTriangleBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -480,7 +479,7 @@
     <ImageView
         android:id="@+id/figureTriangleDBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -496,7 +495,7 @@
     <ImageView
         android:id="@+id/figureTriangleGreen"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -513,7 +512,7 @@
     <ImageView
         android:id="@+id/figureTriangleRed"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -530,7 +529,7 @@
     <ImageView
         android:id="@+id/figureTriangleYellow"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -547,7 +546,7 @@
     <ImageView
         android:id="@+id/figureHexagonBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -564,7 +563,7 @@
     <ImageView
         android:id="@+id/figureHexagonDBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -581,7 +580,7 @@
     <ImageView
         android:id="@+id/figureHexagonGreen"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -598,7 +597,7 @@
     <ImageView
         android:id="@+id/figureHexagonRed"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -615,7 +614,7 @@
     <ImageView
         android:id="@+id/figureHexagonYellow"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -632,7 +631,7 @@
     <ImageView
         android:id="@+id/figureStarBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -649,7 +648,7 @@
     <ImageView
         android:id="@+id/figureStarDBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -664,7 +663,7 @@
     <ImageView
         android:id="@+id/figureStarGreen"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -681,7 +680,7 @@
     <ImageView
         android:id="@+id/figureStarRed"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -696,7 +695,7 @@
     <ImageView
         android:id="@+id/figureStarYellow"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -713,7 +712,7 @@
     <ImageView
         android:id="@+id/figureSquareBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -728,7 +727,7 @@
     <ImageView
         android:id="@+id/figureSquareDBlue"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -745,7 +744,7 @@
     <ImageView
         android:id="@+id/figureSquareGreen"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -762,7 +761,7 @@
     <ImageView
         android:id="@+id/figureSquareRed"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -779,7 +778,7 @@
     <ImageView
         android:id="@+id/figureSquareYellow"
         android:layout_width="35dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignStart="@+id/bin"
         android:layout_alignTop="@+id/bin"
         android:layout_alignParentEnd="true"
@@ -791,5 +790,25 @@
         app:layout_constraintStart_toStartOf="@+id/bin"
         app:layout_constraintTop_toTopOf="@+id/bin" />
 
+<!--
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_imageAssetsFolder="images/"
+        app:lottie_fileName="intro_android.json"
+        app:lottie_autoPlay="true" />
+-->
+
+    <!--
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_imageAssetsFolder="images/"
+            app:lottie_fileName="intro_android.json"
+            app:lottie_loop="false" />
+
+        -->
 
 </android.support.constraint.ConstraintLayout>

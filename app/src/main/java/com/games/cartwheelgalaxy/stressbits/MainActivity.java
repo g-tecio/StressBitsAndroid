@@ -1,18 +1,18 @@
 package com.games.cartwheelgalaxy.stressbits;
 
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 
 import android.media.AudioAttributes;
-import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -25,13 +25,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -52,17 +51,17 @@ public class MainActivity extends Activity {
     Random rand = new Random();
     int count = -1;
     boolean noEntra=false, clickEnable=false;
-    LottieAnimationView animationView;
+    MediaPlayer pieceFit;
+    MediaPlayer pieceDontFit;
+    MediaPlayer timer;
+    MediaPlayer lose;
+    MediaPlayer win;
+
+
     AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
     SoundPool sp = new SoundPool.Builder().setMaxStreams(5).setAudioAttributes(attrs).build();
     int soundIds[] = new int[5];
-
-    SoundPool soundPool;
-    int pieceFit;
-    int PieceDontFit;
-    int timer;
-    int lose;
-    int win;
+    MediaPlayer sfxTimer;
 
     @SuppressLint("ResourceType")
     @Override
@@ -70,48 +69,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-/*
-    animationView = (LottieAnimationView)  findViewById(R.id.animation_view);
-
-    animationView.playAnimation();
-
-
-        animationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                Log.e("ÑONGA:","start");
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.e("ÑONGA:","end");
-                //Your code for remove the fragment
-
-
-                animationView.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                Log.e("ÑONGA:","cancel");
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                Log.e("ÑONGA:","repeat");
-            }
-        });
-
-*/
-
-
 
         soundIds[0] = sp.load(MainActivity.this, R.raw.piece_fit, 1);
         soundIds[1] = sp.load(MainActivity.this, R.raw.piece_dont_fit, 1);
         soundIds[2] = sp.load(MainActivity.this, R.raw.timer, 1);
         soundIds[3] = sp.load(MainActivity.this, R.raw.lose, 1);
         soundIds[4] = sp.load(MainActivity.this, R.raw.kids_cheering, 1);
+
+        pieceFit = MediaPlayer.create(MainActivity.this, R.raw.piece_fit);
+        pieceDontFit = MediaPlayer.create(MainActivity.this, R.raw.piece_dont_fit);
+        timer = MediaPlayer.create(MainActivity.this, R.raw.timer);
+        lose = MediaPlayer.create(MainActivity.this, R.raw.lose);
+        win = MediaPlayer.create(MainActivity.this, R.raw.kids_cheering);
 
 
 
@@ -395,8 +364,8 @@ public class MainActivity extends Activity {
         timerNeedle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sp.play(soundIds[2], 1, 1, 1, 290, 1.0f);
-
+                timer.start();
+                timer.setLooping(true);
                 RotateAnimation rotation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF,
                         0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotation.setDuration(90000);
@@ -424,13 +393,11 @@ public class MainActivity extends Activity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         // Pass the Intent to switch to other Activity
-
-                        sp.play(soundIds[3], 1, 1, 1, 0, 1.0f);
-                            Intent menuIntent = new Intent(MainActivity.this, LoseActivity.class);
-                            startActivity(menuIntent);
-                            Log.v("PERDISTE", "CAMBIO DE ESCENA");
-
-
+                        timer.stop();
+                        lose.start();
+                        startActivity(new Intent(MainActivity.this, LoseActivity.class));
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
                     }
                 });
             }
@@ -441,90 +408,66 @@ public class MainActivity extends Activity {
 
 
 
-            bin.setOnTouchListener(new View.OnTouchListener() {
+        bin.setOnTouchListener(new View.OnTouchListener() {
 
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
 
-                    switch (event.getActionMasked()) {
-                        case MotionEvent.ACTION_DOWN:
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
 
-                            count = count + 1;
-                            Log.v("CONTADOR", String.valueOf(count));
-                            Log.v("CONTADOR ARRAY", String.valueOf(figures.size()));
+                        count = count + 1;
 
+                        if (count == 25) {
+                            count = count - 24;
 
-
-                            if (count == 25) {
-                                count = count - 24;
-                                Log.v("CONTADOR NUEVO", String.valueOf(count));
-                            }
-
-                            if (count >= figures.size()) {
-                                count = figures.size() - 1;
-                                // count = count - 24;
-                                Log.v("NUEVO", String.valueOf(count));
-                            }
-
-                            randomElement = figures.get(count);
-                            xImage = randomElement.getLeft();
-                            yImage = randomElement.getTop();
-                            Log.v("XIMAGE", String.valueOf(xImage));
-                            Log.v("YIMAGE", String.valueOf(yImage));
-                            break;
-
-                        case MotionEvent.ACTION_MOVE:
-                            randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 50).setDuration(0).start();
-                            //  randomElement.animate().translationYBy(-100).setDuration(500);
-
-                            break;
-                        case MotionEvent.ACTION_UP:
-
-                            detectCollision();
-                            if (noEntra == false) {
-                                figures.remove(count);
-                                Log.v("ANTES: ", String.valueOf(count));
-                            }
-
-                            if (figures.size() == 0){
-                                sp.play(soundIds[4], 1, 1, 1, 0, 1.0f);
-                                Intent menuIntent = new Intent(MainActivity.this, WinActivity.class);
-                                startActivity(menuIntent);
-                                Log.v("PERDISTE", "CAMBIO DE ESCENA");
-
-                            }
-
-
-/*
-                        if (count <= figures.size()){
-                            // figures.add(imageView1);
-                            if(figures.size() == 1 ){
-                                Log.v("ENTRO: ",String.valueOf(count));
-
-                                count = 1;
-                            }
-                            Log.v("DESPUES: ",String.valueOf(count));
-                            count = figures.size() -1;
                         }
-*/
+
+                        if (count >= figures.size()) {
+                            count = figures.size() - 1;
+                        }
+
+                        randomElement = figures.get(count);
+                        xImage = randomElement.getLeft();
+                        yImage = randomElement.getTop();
+
+                        randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 180).setDuration(150).start();
+
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                       randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 180).setDuration(0).start();
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+
+                        detectCollision();
+                        if (noEntra == false) {
+                            figures.remove(count);
+                        }if(noEntra){
 
 
-                            //  Toast.makeText(MainActivity.this, "Se soltó la pieza", Toast.LENGTH_SHORT).show();
-
-                            break;
-                        default:
-                            return false;
+                        randomElement.animate().x(xImage).y(yImage).setDuration(0).start();
                     }
-                    return true;
+                        if (figures.size() == 0){
+
+                            win.start();
+                            timer.stop();
+                            startActivity(new Intent(MainActivity.this, WinActivity.class));
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            finish();
+                        }
+
+                        break;
+                    default:
+                        return false;
                 }
-            });
-
-
-
-
+                return true;
+            }
+        });
 
     }
-
 
     public void detectCollision() {
 
@@ -546,7 +489,7 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(0).setImageResource(R.mipmap.filled_circle_dblue);
                 randomElement.setVisibility(View.GONE);
                 sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
@@ -562,9 +505,8 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
+
 
             }
 
@@ -589,10 +531,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(1).setImageResource(R.mipmap.filled_squre_dblue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_dblue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -604,11 +546,8 @@ public class MainActivity extends Activity {
             } else {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
-
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -634,10 +573,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(2).setImageResource(R.mipmap.filled_hexagon_dblue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_dblue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -648,11 +587,8 @@ public class MainActivity extends Activity {
 
             } else {
                 Log.d(TAG, "Sin colision");
-
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -676,10 +612,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(3).setImageResource(R.mipmap.filled_triangle_dblue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_dblue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -691,11 +627,8 @@ public class MainActivity extends Activity {
             } else {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
-
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -719,10 +652,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(4).setImageResource(R.mipmap.filled_star_dblue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_dblue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -734,11 +667,8 @@ public class MainActivity extends Activity {
             } else {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
-
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -749,43 +679,40 @@ public class MainActivity extends Activity {
             Log.v("Correcto", "son iguales");
 
 
-        final int[] loc = new int[2];
+            final int[] loc = new int[2];
 
-        randomElement.getLocationInWindow(loc);
-        final Rect rc1 = new Rect(loc[0], loc[1],
-                loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
-
-
-        names.get(5).getLocationInWindow(loc);
-        final Rect rc2 = new Rect(loc[0], loc[1],
-                loc[0] + names.get(5).getWidth(), loc[1] + names.get(5).getHeight());
-
-        if (Rect.intersects(rc1, rc2)) {
-            Log.d(TAG, "Colision");
-            noEntra = false;
-            Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
-            names.get(5).setImageResource(R.mipmap.filled_circle_blue);
-            randomElement.setVisibility(View.GONE);
-            sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
-
-            ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 600);
-            ps.setScaleRange(1f, 2.3f);
-            ps.setSpeedRange(0.1f, 0.25f);
-            ps.setRotationSpeedRange(90, 180);
-            ps.setFadeOut(200, new AccelerateInterpolator());
-            ps.oneShot(names.get(5), 70);
-
-        } else {
-            Log.d(TAG, "Sin colision");
-            noEntra = true;
-
-            count = count + 1;
-            randomElement.setY(yImage);
-            randomElement.setX(xImage);
-            sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+            randomElement.getLocationInWindow(loc);
+            final Rect rc1 = new Rect(loc[0], loc[1],
+                    loc[0] + randomElement.getWidth(), loc[1] + randomElement.getHeight());
 
 
-        }
+            names.get(5).getLocationInWindow(loc);
+            final Rect rc2 = new Rect(loc[0], loc[1],
+                    loc[0] + names.get(5).getWidth(), loc[1] + names.get(5).getHeight());
+
+            if (Rect.intersects(rc1, rc2)) {
+                Log.d(TAG, "Colision");
+                noEntra = false;
+
+                names.get(5).setImageResource(R.mipmap.filled_circle_blue);
+                randomElement.setVisibility(View.GONE);
+                pieceFit.start();
+
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 600);
+                ps.setScaleRange(1f, 2.3f);
+                ps.setSpeedRange(0.1f, 0.25f);
+                ps.setRotationSpeedRange(90, 180);
+                ps.setFadeOut(200, new AccelerateInterpolator());
+                ps.oneShot(names.get(5), 70);
+
+            } else {
+                Log.d(TAG, "Sin colision");
+                noEntra = true;
+                count = count + 1;
+                pieceDontFit.start();
+
+
+            }
 
         }
 
@@ -807,10 +734,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(6).setImageResource(R.mipmap.filled_squre_blue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_blue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -822,11 +749,8 @@ public class MainActivity extends Activity {
             } else {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
-
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -852,10 +776,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(7).setImageResource(R.mipmap.filled_hexagon_blue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_blue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -869,9 +793,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -894,10 +816,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(8).setImageResource(R.mipmap.filled_triangle_blue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_blue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -911,9 +833,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -936,10 +857,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(9).setImageResource(R.mipmap.filled_star_blue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_blue, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -953,9 +874,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -979,10 +898,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(10).setImageResource(R.mipmap.filled_circle_green);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_green, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -996,9 +915,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -1021,10 +939,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(11).setImageResource(R.mipmap.filled_squre_green);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_green, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1038,9 +956,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -1063,10 +980,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(12).setImageResource(R.mipmap.filled_hexagon_green);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_green, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1080,9 +997,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -1105,10 +1021,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(13).setImageResource(R.mipmap.filled_triangle_green);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_green, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1122,9 +1038,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
         }
 
@@ -1146,10 +1061,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(14).setImageResource(R.mipmap.filled_star_green);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_green, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1162,9 +1077,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -1188,10 +1101,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(15).setImageResource(R.mipmap.filled_circle_red);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_red, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1204,9 +1117,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 
@@ -1230,10 +1141,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(16).setImageResource(R.mipmap.filled_squre_red);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_red, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1246,9 +1157,8 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -1270,10 +1180,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(17).setImageResource(R.mipmap.filled_hexagon_red);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_red, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1287,9 +1197,8 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+
+                pieceDontFit.start();
             }
 
         }
@@ -1312,10 +1221,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(18).setImageResource(R.mipmap.filled_triangle_red);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_red, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1329,9 +1238,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1354,10 +1261,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(19).setImageResource(R.mipmap.filled_star_red);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_red, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1371,9 +1278,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1396,10 +1301,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(20).setImageResource(R.mipmap.filled_circle_yellow);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_yellow, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1413,9 +1318,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1438,10 +1341,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(21).setImageResource(R.mipmap.filled_squre_yellow);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_yellow, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1455,9 +1358,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1480,10 +1381,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(22).setImageResource(R.mipmap.filled_hexagon_yellow);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_yellow, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1497,9 +1398,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1522,10 +1421,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(23).setImageResource(R.mipmap.filled_triangle_yellow);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_yellow, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1538,10 +1437,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "Sin colision");
                 noEntra = true;
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
             }
 
         }
@@ -1564,10 +1460,10 @@ public class MainActivity extends Activity {
             if (Rect.intersects(rc1, rc2)) {
                 Log.d(TAG, "Colision");
                 noEntra = false;
-                Toast.makeText(this, "Hay una colision", Toast.LENGTH_SHORT).show();
+
                 names.get(24).setImageResource(R.mipmap.filled_star_yellow);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+                pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_yellow, 600);
                 ps.setScaleRange(1f, 2.3f);
@@ -1581,9 +1477,7 @@ public class MainActivity extends Activity {
                 noEntra = true;
 
                 count = count + 1;
-                randomElement.setY(yImage);
-                randomElement.setX(xImage);
-                sp.play(soundIds[1], 1, 1, 1, 0, 1.0f);
+                pieceDontFit.start();
 
             }
 

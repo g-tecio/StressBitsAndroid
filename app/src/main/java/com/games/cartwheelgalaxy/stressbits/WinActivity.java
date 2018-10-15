@@ -26,8 +26,9 @@ public class WinActivity extends Activity {
         switch (e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                Intent menuIntent = new Intent(WinActivity.this, MainActivity.class);
-                startActivity(menuIntent);
+                startActivity(new Intent(WinActivity.this, MainActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
                 Log.v("PERDISTE", "CAMBIO DE ESCENA");
                 Log.d("DEBUG", "On touch (down)" + String.valueOf(xpos) + String.valueOf(ypos));
             case MotionEvent.ACTION_UP:

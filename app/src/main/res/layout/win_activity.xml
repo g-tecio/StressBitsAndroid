@@ -34,7 +34,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:background="@mipmap/timer_needle"
-        android:rotation="-44"
+
         app:layout_constraintBottom_toBottomOf="@+id/timerBase"
         app:layout_constraintEnd_toEndOf="@+id/timerBase"
         app:layout_constraintStart_toStartOf="@+id/timerBase"
@@ -71,7 +71,7 @@
         android:background="@mipmap/smiley_face"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintHorizontal_bias="0.206"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -8,9 +8,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 public class LoseActivity extends Activity {
 
-
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +23,21 @@ public class LoseActivity extends Activity {
         setContentView(R.layout.lose_activity);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        MobileAds.initialize(this, "ca-app-pub-5267056163100832~9942579333");
 
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-5267056163100832/3484696781");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                startActivity(new Intent(LoseActivity.this, MainActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
     }
 
     public boolean onTouchEvent(MotionEvent e)
@@ -28,9 +47,13 @@ public class LoseActivity extends Activity {
         switch (e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                startActivity(new Intent(LoseActivity.this, MainActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    startActivity(new Intent(LoseActivity.this, MainActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                }
                 Log.v("PERDISTE", "CAMBIO DE ESCENA");
                 Log.d("DEBUG", "On touch (down)" + String.valueOf(xpos) + String.valueOf(ypos));
             case MotionEvent.ACTION_UP:

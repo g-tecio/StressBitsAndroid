@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "20528864307",
+    "firebase_url": "https://game-stress-bits-6277b.firebaseio.com",
+    "project_id": "game-stress-bits-6277b",
+    "storage_bucket": "game-stress-bits-6277b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20528864307:android:73c3d5ca5e24d5e2",
+        "android_client_info": {
+          "package_name": "com.games.cartwheelgalaxy.stressbits"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20528864307-jij3ob1oi601e18e4tmbi6q5si13rb3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRu4uTNNHrLJaITYK3ukb-KtD6eSSHgQ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

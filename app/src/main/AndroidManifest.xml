@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.games.cartwheelgalaxy.stressbits">
 
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
     <supports-screens
         android:resizeable="true"
         android:smallScreens="true"
@@ -18,6 +21,11 @@
         android:roundIcon="@mipmap/ic_launcher_round_sb"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5267056163100832~9942579333"/>
+
         <activity
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden"
@@ -45,6 +53,8 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden"
             android:name=".WinActivity">
+
+
         </activity>
     </application>
 </manifest>

@@ -24,7 +24,8 @@ import android.view.animation.RotateAnimation;
 
 import android.widget.ImageView;
 
-
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends Activity {
-    private float xCoOrdinate, yCoOrdinate;
+    float xCoOrdinate, yCoOrdinate;
     ImageView figureCircleBlue, figureCircleRed, figureCircleDBlue, figureCircleGreen, figureCircleYellow, figureSquareBlue, figureSquareRed, figureSquareDBlue, figureSquareGreen, figureSquareYellow,
             figureStarBlue, figureStarRed, figureStarDBlue, figureStarGreen, figureStarYellow, figureTriangleBlue, figureTriangleRed, figureTriangleDBlue, figureTriangleGreen, figureTriangleYellow,
             figureHexagonBlue, figureHexagonRed, figureHexagonDBlue, figureHexagonGreen, figureHexagonYellow, bin, timerNeedle, randomElement;
@@ -53,7 +54,6 @@ public class MainActivity extends Activity {
     MediaPlayer win;
 
 
-    MediaPlayer sfxTimer;
 
     @SuppressLint("ResourceType")
     @Override
@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        MobileAds.initialize(this, "ca-app-pub-5267056163100832~9942579333");
 
         pieceFit = MediaPlayer.create(MainActivity.this, R.raw.piece_fit);
         pieceDontFit = MediaPlayer.create(MainActivity.this, R.raw.piece_dont_fit);
@@ -371,9 +373,13 @@ public class MainActivity extends Activity {
                         // Pass the Intent to switch to other Activity
                         timer.stop();
                         lose.start();
-                        startActivity(new Intent(MainActivity.this, LoseActivity.class));
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        finish();
+
+                            startActivity(new Intent(MainActivity.this, LoseActivity.class));
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            finish();
+                            Log.d("TAG", "The interstitial wasn't loaded yet.");
+
+
                     }
                 });
             }
@@ -430,6 +436,7 @@ public class MainActivity extends Activity {
 
                             win.start();
                             timer.stop();
+
                             startActivity(new Intent(MainActivity.this, WinActivity.class));
                             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             finish();
@@ -471,7 +478,7 @@ public class MainActivity extends Activity {
 
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_dblue, 350);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -513,7 +520,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_dblue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -555,7 +562,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_dblue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -594,7 +601,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_dblue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -634,7 +641,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_dblue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -675,7 +682,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -716,7 +723,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_blue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -758,7 +765,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_blue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -798,7 +805,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_blue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -839,7 +846,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_blue, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -880,7 +887,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_green, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -921,7 +928,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_green, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -962,7 +969,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_green, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1003,7 +1010,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_green, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1043,7 +1050,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_green, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1083,7 +1090,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_red, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1123,7 +1130,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_red, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1162,7 +1169,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_red, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1203,7 +1210,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_red, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1243,7 +1250,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_red, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1283,7 +1290,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_yellow, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1323,7 +1330,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_yellow, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1363,7 +1370,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_yellow, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1403,7 +1410,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_yellow, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());
@@ -1442,7 +1449,7 @@ public class MainActivity extends Activity {
                 pieceFit.start();
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_yellow, 600);
-                ps.setScaleRange(1f, 2.3f);
+                ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
                 ps.setFadeOut(200, new AccelerateInterpolator());

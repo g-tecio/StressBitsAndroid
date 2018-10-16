@@ -31,7 +31,6 @@ public class LoseActivity extends Activity {
                 startActivity(new Intent(LoseActivity.this, MainActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
-
                 Log.v("PERDISTE", "CAMBIO DE ESCENA");
                 Log.d("DEBUG", "On touch (down)" + String.valueOf(xpos) + String.valueOf(ypos));
             case MotionEvent.ACTION_UP:

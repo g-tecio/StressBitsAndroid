@@ -6,13 +6,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.DragEvent;
+
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -25,15 +23,13 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+
 
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 
@@ -48,7 +44,6 @@ public class MainActivity extends Activity {
             imageView13, imageView14, imageView15, imageView16, imageView17, imageView18, imageView19, imageView20, imageView21, imageView22, imageView23, imageView24, imageView25, timerBase;
     List<ImageView> names;
     List<ImageView> figures;
-    Random rand = new Random();
     int count = -1;
     boolean noEntra=false, clickEnable=false;
     MediaPlayer pieceFit;
@@ -58,9 +53,6 @@ public class MainActivity extends Activity {
     MediaPlayer win;
 
 
-    AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
-    SoundPool sp = new SoundPool.Builder().setMaxStreams(5).setAudioAttributes(attrs).build();
-    int soundIds[] = new int[5];
     MediaPlayer sfxTimer;
 
     @SuppressLint("ResourceType")
@@ -70,20 +62,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        soundIds[0] = sp.load(MainActivity.this, R.raw.piece_fit, 1);
-        soundIds[1] = sp.load(MainActivity.this, R.raw.piece_dont_fit, 1);
-        soundIds[2] = sp.load(MainActivity.this, R.raw.timer, 1);
-        soundIds[3] = sp.load(MainActivity.this, R.raw.lose, 1);
-        soundIds[4] = sp.load(MainActivity.this, R.raw.kids_cheering, 1);
-
         pieceFit = MediaPlayer.create(MainActivity.this, R.raw.piece_fit);
         pieceDontFit = MediaPlayer.create(MainActivity.this, R.raw.piece_dont_fit);
         timer = MediaPlayer.create(MainActivity.this, R.raw.timer);
         lose = MediaPlayer.create(MainActivity.this, R.raw.lose);
         win = MediaPlayer.create(MainActivity.this, R.raw.kids_cheering);
-
-
-
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -302,12 +285,7 @@ public class MainActivity extends Activity {
         figures.add(figureStarRed);
         figures.add(figureStarYellow);
 
-
-
         Collections.shuffle(figures);
-        Log.v("CONTADOR ORIGINAL", String.valueOf(figures.size()));
-
-
 
         figureCircleBlue.setTag("container_circle_blue");
         figureSquareBlue.setTag("container_square_blue");
@@ -338,8 +316,6 @@ public class MainActivity extends Activity {
         figureHexagonYellow.setTag("container_hexagone_yellow");
         figureTriangleYellow.setTag("container_triangle_yellow");
         figureStarYellow.setTag("container_star_yellow");
-
-
 
 
         Animation fadeIn = new AlphaAnimation(0.7f, 0.9f);
@@ -492,7 +468,7 @@ public class MainActivity extends Activity {
 
                 names.get(0).setImageResource(R.mipmap.filled_circle_dblue);
                 randomElement.setVisibility(View.GONE);
-                sp.play(soundIds[0], 1, 1, 1, 0, 1.0f);
+
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_dblue, 350);
                 ps.setScaleRange(1f, 2.3f);

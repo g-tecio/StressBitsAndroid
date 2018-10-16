@@ -2,22 +2,14 @@ package com.games.cartwheelgalaxy.stressbits;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.WindowManager;
-
-import android.widget.ImageView;
 import android.widget.VideoView;
-
-import com.airbnb.lottie.LottieAnimationView;
-import com.bumptech.glide.Glide;
 
 public class IntroActivity extends Activity {
 
-    LottieAnimationView animationView;
     VideoView videoIntro;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +28,8 @@ public class IntroActivity extends Activity {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 if (isFinishing())
                     return;
-
                 startActivity(new Intent(IntroActivity.this, MainActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
         });

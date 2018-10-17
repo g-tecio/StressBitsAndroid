@@ -1,6 +1,9 @@
 package com.games.cartwheelgalaxy.stressbits;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -53,7 +56,7 @@ public class MainActivity extends Activity {
     MediaPlayer lose;
     MediaPlayer win;
 
-
+    private ObjectAnimator rotation;
 
     @SuppressLint("ResourceType")
     @Override
@@ -62,7 +65,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        MobileAds.initialize(this, "ca-app-pub-5267056163100832~9942579333");
 
         pieceFit = MediaPlayer.create(MainActivity.this, R.raw.piece_fit);
         pieceDontFit = MediaPlayer.create(MainActivity.this, R.raw.piece_dont_fit);
@@ -335,8 +337,56 @@ public class MainActivity extends Activity {
         animation.addAnimation(fadeOut);
         animation.addAnimation(fadeIn);
         timerBase.setAnimation(animation);
-
         bin.setEnabled(false);
+
+  /*
+        //ROTATE TIMER NEEDLE
+        timerNeedle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timer.start();
+                timer.setLooping(true);
+
+                timerNeedle.animate().rotation(360).setDuration(9000).start();
+                timerNeedle.setEnabled(false);
+
+                timerBase.clearAnimation();
+                timerBase.setAlpha(1.0f);
+                bin.setEnabled(true);
+
+
+                timerNeedle.animate().setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        timer.stop();
+                        lose.start();
+
+                        startActivity(new Intent(MainActivity.this, LoseActivity.class));
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
+                    }
+
+                    @Override
+                    public void onAnimationPause(Animator animation) {
+                        super.onAnimationPause(animation);
+
+                        animation.pause();
+                        Log.v("ANIMACION","ESTA PAUSADA");
+
+                    }
+
+                    @Override
+                    public void onAnimationResume(Animator animation) {
+                        super.onAnimationResume(animation);
+                        animation.resume();
+                        Log.v("ANIMACION","SE RESUME");
+
+
+                    }
+                });
+            }
+        });
+*/
 
         //ROTATE TIMER NEEDLE
         timerNeedle.setOnClickListener(new View.OnClickListener() {
@@ -344,7 +394,51 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 timer.start();
                 timer.setLooping(true);
-                RotateAnimation rotation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF,
+
+                rotation = ObjectAnimator.ofFloat(timerNeedle, "rotation", 0, 360);
+                rotation.setDuration(90000);
+                rotation.start();
+                timerNeedle.setEnabled(false);
+
+                timerBase.clearAnimation();
+                timerBase.setAlpha(1.0f);
+                bin.setEnabled(true);
+
+                rotation.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        Log.d("TAG", "Se acabo");
+                        timer.stop();
+                        lose.start();
+
+                        startActivity(new Intent(MainActivity.this, LoseActivity.class));
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
+
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+            }
+        });
+
+
+
+  /*
+        timerNeedle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timer.start();
+                timer.setLooping(true);
+                rotation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF,
                         0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 rotation.setDuration(90000);
 
@@ -360,12 +454,12 @@ public class MainActivity extends Activity {
                 rotation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-                        // TODO Auto-generated method stub
+
                     }
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {
-                        // TODO Auto-generated method stub
+
                     }
 
                     @Override
@@ -384,10 +478,7 @@ public class MainActivity extends Activity {
                 });
             }
         });
-
-        Log.v("CONTADOR ARRAY", String.valueOf(figures.size()));
-
-
+*/
 
 
         bin.setOnTouchListener(new View.OnTouchListener() {
@@ -451,6 +542,28 @@ public class MainActivity extends Activity {
         });
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("PAUSADO","ESTA PAUSADO");
+        timer.pause();
+        if (rotation != null) {
+            rotation.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (rotation != null) {
+            rotation.resume();
+            timer.start();
+        }
+
+    }
+
 
     public void detectCollision() {
 
@@ -519,7 +632,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_dblue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_dblue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -561,7 +674,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_dblue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_dblue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -600,7 +713,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_dblue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_dblue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -640,7 +753,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_dblue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_dblue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -681,7 +794,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_blue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -722,7 +835,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_blue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_blue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -764,7 +877,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_blue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_blue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -804,7 +917,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_blue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_blue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -845,7 +958,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_blue, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_blue, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -886,7 +999,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_green, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_green, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -927,7 +1040,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_green, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_green, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -968,7 +1081,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_green, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_green, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1009,7 +1122,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_green, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_green, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1049,7 +1162,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_green, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_green, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1089,7 +1202,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_red, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_red, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1129,7 +1242,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_red, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_red, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1168,7 +1281,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_red, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_red, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1209,7 +1322,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_red, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_red, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1249,7 +1362,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_red, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_red, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1289,7 +1402,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_yellow, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_yellow, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1329,7 +1442,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_yellow, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_square_yellow, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1369,7 +1482,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_yellow, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_hexa_yellow, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1409,7 +1522,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_yellow, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_triangle_yellow, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1448,7 +1561,7 @@ public class MainActivity extends Activity {
                 randomElement.setVisibility(View.GONE);
                 pieceFit.start();
 
-                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_yellow, 600);
+                ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_star_yellow, 350);
                 ps.setScaleRange(0.3f, 0.6f);
                 ps.setSpeedRange(0.1f, 0.25f);
                 ps.setRotationSpeedRange(90, 180);
@@ -1466,4 +1579,6 @@ public class MainActivity extends Activity {
 
         }
     }
+
+
 }

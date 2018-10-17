@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -15,18 +16,25 @@ import com.google.android.gms.ads.MobileAds;
 public class WinActivity extends Activity {
 
     private InterstitialAd mInterstitialAd;
-
+    AdRequest request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.win_activity);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        Bundle extras = new Bundle();
+        extras.putString("max_ad_content_rating", "PG");
+        request = new AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .tagForChildDirectedTreatment(true)
+                .build();
+
         MobileAds.initialize(this, "ca-app-pub-5267056163100832~9942579333");
 
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-5267056163100832/3484696781");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.loadAd(request);
 
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
@@ -34,10 +42,9 @@ public class WinActivity extends Activity {
                 startActivity(new Intent(WinActivity.this, MainActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                mInterstitialAd.loadAd(request);
             }
         });
-
     }
 
     public boolean onTouchEvent(MotionEvent e)

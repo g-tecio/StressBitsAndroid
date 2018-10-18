@@ -403,7 +403,7 @@ public class MainActivity extends Activity {
                 timer.setLooping(true);
 
                 rotation = ObjectAnimator.ofFloat(timerNeedle, "rotation", 0, 360);
-                rotation.setDuration(9000);
+                rotation.setDuration(90000);
                 rotation.start();
                 timerNeedle.setEnabled(false);
 

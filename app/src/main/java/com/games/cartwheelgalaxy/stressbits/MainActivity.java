@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -56,6 +57,9 @@ public class MainActivity extends Activity {
     MediaPlayer lose;
     MediaPlayer win;
 
+    int marginX;
+    int marginY;
+
     private ObjectAnimator rotation;
 
     @SuppressLint("ResourceType")
@@ -64,6 +68,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        marginX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getApplicationContext().getResources().getDisplayMetrics());
+        marginY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 65, getApplicationContext().getResources().getDisplayMetrics());
 
 
         pieceFit = MediaPlayer.create(MainActivity.this, R.raw.piece_fit);
@@ -396,7 +403,7 @@ public class MainActivity extends Activity {
                 timer.setLooping(true);
 
                 rotation = ObjectAnimator.ofFloat(timerNeedle, "rotation", 0, 360);
-                rotation.setDuration(90000);
+                rotation.setDuration(9000);
                 rotation.start();
                 timerNeedle.setEnabled(false);
 
@@ -491,25 +498,25 @@ public class MainActivity extends Activity {
 
                         count = count + 1;
 
+                        if (count >= figures.size()) {
+                            count = figures.size() - 1;
+                        }
+
                         if (count == 25) {
                             count = count - 24;
 
-                        }
-
-                        if (count >= figures.size()) {
-                            count = figures.size() - 1;
                         }
 
                         randomElement = figures.get(count);
                         xImage = randomElement.getLeft();
                         yImage = randomElement.getTop();
 
-                        randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 180).setDuration(150).start();
+                        randomElement.animate().x(event.getRawX() + xCoOrdinate - marginX).y(event.getRawY() + yCoOrdinate - marginY).setDuration(150).start();
 
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                       randomElement.animate().x(event.getRawX() + xCoOrdinate - 50).y(event.getRawY() + yCoOrdinate - 180).setDuration(0).start();
+                       randomElement.animate().x(event.getRawX() + xCoOrdinate - marginX).y(event.getRawY() + yCoOrdinate - marginY).setDuration(0).start();
 
                         break;
 
@@ -518,11 +525,19 @@ public class MainActivity extends Activity {
                         detectCollision();
                         if (noEntra == false) {
                             figures.remove(count);
+
+
+
+                            Log.e("HEXAGON", "ARRAY:" + String.valueOf(figures.size()) + " CONTADOR:" + String.valueOf(count) );
+                          //  Log.e("HEXAGON", String.valueOf(count));
                         }if(noEntra){
 
-
+                        if(figures.size() == count ){
+                            Log.w("SI JALA","JALATE PERRO!");
+                        }
                         randomElement.animate().x(xImage).y(yImage).setDuration(0).start();
                     }
+
                         if (figures.size() == 0){
 
                             win.start();
@@ -547,8 +562,9 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.v("PAUSADO","ESTA PAUSADO");
-        timer.pause();
+
         if (rotation != null) {
+            timer.pause();
             rotation.pause();
         }
     }
@@ -588,6 +604,7 @@ public class MainActivity extends Activity {
 
                 names.get(0).setImageResource(R.mipmap.filled_circle_dblue);
                 randomElement.setVisibility(View.GONE);
+                pieceFit.start();
 
 
                 ParticleSystem ps = new ParticleSystem(this, 6, R.mipmap.particle_circle_dblue, 350);
@@ -603,9 +620,7 @@ public class MainActivity extends Activity {
                 count = count + 1;
                 pieceDontFit.start();
 
-
             }
-
         }
 
 
@@ -683,7 +698,9 @@ public class MainActivity extends Activity {
 
             } else {
                 Log.d(TAG, "Sin colision");
+                noEntra = true;
                 count = count + 1;
+                //figureHexagonDBlue.animate().x(xImage).y(yImage).setDuration(0).start();
                 pieceDontFit.start();
             }
 

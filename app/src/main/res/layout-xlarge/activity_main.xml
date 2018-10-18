@@ -790,14 +790,4 @@
         app:layout_constraintStart_toStartOf="@+id/bin"
         app:layout_constraintTop_toTopOf="@+id/bin" />
 
-    <ImageView
-        android:id="@+id/simple_anim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints" />
-
-
-
 </android.support.constraint.ConstraintLayout>

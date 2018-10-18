@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.games.cartwheelgalaxy.stressbits">
 
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-
     <supports-screens
         android:resizeable="true"
         android:smallScreens="true"
@@ -40,13 +37,14 @@
 
         <activity
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:name=".MainActivity">
         </activity>
 
         <activity
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:name=".LoseActivity">
         </activity>
 

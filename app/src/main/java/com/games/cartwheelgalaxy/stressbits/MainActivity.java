@@ -4,13 +4,16 @@ package com.games.cartwheelgalaxy.stressbits;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -56,7 +59,7 @@ public class MainActivity extends Activity {
     MediaPlayer timer;
     MediaPlayer lose;
     MediaPlayer win;
-
+    Float durationScale;
     int marginX;
     int marginY;
 
@@ -68,6 +71,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
+        durationScale = Settings.Global.getFloat(getApplication().getContentResolver(),
+                Settings.Global.ANIMATOR_DURATION_SCALE, 1);
 
         marginX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getApplicationContext().getResources().getDisplayMetrics());
         marginY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 65, getApplicationContext().getResources().getDisplayMetrics());
@@ -175,6 +182,16 @@ public class MainActivity extends Activity {
         int intname = imageView1.getId();
         String stringname = getResources().getResourceEntryName(intname);
         System.out.println("stringname: " + stringname);
+
+        if (durationScale != 1) {
+            try {
+                ValueAnimator.class.getMethod("setDurationScale", float.class).invoke(null, 1f);
+                durationScale = 1f;
+                Log.v("TAG","HOLA");
+            } catch (Throwable t) {
+                Log.v("TAG",String.valueOf(t));
+            }
+        }
 
 
         imageView1.setTag("container_circle_dblue");
@@ -1595,7 +1612,8 @@ public class MainActivity extends Activity {
             }
 
         }
-    }
 
+
+    }
 
 }

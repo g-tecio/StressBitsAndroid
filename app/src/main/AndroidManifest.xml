@@ -10,6 +10,7 @@
         android:xlargeScreens="true"  />
 
     <application
+        android:resizeableActivity="false"
         android:largeHeap="true"
         android:hardwareAccelerated="false"
         android:allowBackup="true"
@@ -39,18 +40,21 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
+            android:resizeableActivity="false"
             android:name=".MainActivity">
         </activity>
 
         <activity
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:resizeableActivity="false"
             android:name=".LoseActivity">
         </activity>
 
         <activity
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|keyboardHidden"
+            android:resizeableActivity="false"
             android:name=".WinActivity">
 
 
